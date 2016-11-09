@@ -14,9 +14,18 @@ except ImportError:
     from django.utils.importlib import import_module
 
 try:
-    from django.conf.urls import url, patterns, include, handler404, handler500
+    from django.conf.urls import url, include, handler404, handler500
 except ImportError:
-    from django.conf.urls.defaults import url, patterns, include, handler404, handler500 # pyflakes:ignore
+    from django.conf.urls.defaults import url, include, handler404, handler500 # pyflakes:ignore
+
+try:
+    from django.conf.urls import patterns
+except ImportError:
+    try:
+        from django.conf.urls.defaults import patterns
+    except ImportError:
+        def patterns(prefix, *urls):
+            return urls
 
 __all__ = [
     'User',
