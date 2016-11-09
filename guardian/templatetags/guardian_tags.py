@@ -14,8 +14,18 @@ try:
     from django.template import InvalidTemplateLibrary
 except ImportError:
     # Django >= 1.8
-    from django.template.base import get_library
-    from django.template.base import InvalidTemplateLibrary
+    try:
+        from django.template.base import get_library
+        from django.template.base import InvalidTemplateLibrary
+    except ImportError:
+        def get_library(*args, **kwargs):
+            """We don't use Guardian anymore and anyone
+            who is using older version of Django will not
+            see this exception handler.
+            """
+            return None
+        from django.template.library import InvalidTemplateLibrary
+
 from django.template.defaulttags import LoadNode
 
 from guardian.compat import get_user_model
